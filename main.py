@@ -8,6 +8,7 @@ SQUARE = 1000
 
 BACKGROUND = (10, 10, 10)
 WHITE = (255, 255, 255)
+COLOR = (0, 177, 255)
 
 ORDER = 7
 N = int(math.pow(2, ORDER))
@@ -16,6 +17,56 @@ TOTAL = N * N
 COUNTER = 0
 
 PATH: [Vector2] = [0] * TOTAL
+
+rr = False
+gr = False
+br = False
+
+
+def rainbowColor(color):
+    global rr, gr, br
+    red, green, blue = color
+
+    if rr:
+        if red <= 1:
+            rr = False
+            red = 2
+        else:
+            red -= 1
+    else:
+        if red >= 254:
+            rr = True
+            red = 253
+        else:
+            red += 1
+
+    if gr:
+        if green <= 1:
+            gr = False
+            green = 2
+        else:
+            green -= 1
+    else:
+        if green >= 254:
+            gr = True
+            green = 253
+        else:
+            green += 1
+
+    if br:
+        if blue <= 1:
+            br = False
+            blue = 2
+        else:
+            blue -= 1
+    else:
+        if blue >= 254:
+            br = True
+            blue = 253
+        else:
+            blue += 1
+
+    return red, green, blue
 
 
 def hilbert(i: int) -> Vector2:
@@ -53,8 +104,15 @@ def hilbert(i: int) -> Vector2:
     return v
 
 
+def checkQuitEvent():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            return
+
+
 def main():
-    global PATH, COUNTER
+    global PATH, COUNTER, COLOR
     pygame.init()
     screen = pygame.display.set_mode((SQUARE, SQUARE))
 
@@ -67,10 +125,7 @@ def main():
         PATH[i].y += lenth / 2
 
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
+        checkQuitEvent()
 
         screen.fill(BACKGROUND)
 
@@ -80,8 +135,13 @@ def main():
         if COUNTER >= len(PATH):
             COUNTER = len(PATH)
 
-        for i in range(COUNTER - 1):
-            pygame.draw.line(screen, WHITE, (PATH[i].x, PATH[i].y), (PATH[i + 1].x, PATH[i + 1].y), 2)
+        for i in range(len(PATH) - 1):
+            if (i % (N/4)) == 0:
+                COLOR = rainbowColor(COLOR)
+            pygame.draw.line(screen, COLOR, (PATH[i].x, PATH[i].y), (PATH[i + 1].x, PATH[i + 1].y), 2)
+            """time.sleep(0.00000001)
+            pygame.display.update()
+            checkQuitEvent()"""
 
         pygame.display.update()
 
