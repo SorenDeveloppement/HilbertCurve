@@ -4,12 +4,12 @@ import time
 
 from pygame import Vector2
 
-SQUARE = 600
+SQUARE = 1000
 
 BACKGROUND = (10, 10, 10)
 WHITE = (255, 255, 255)
 
-ORDER = 6
+ORDER = 7
 N = int(math.pow(2, ORDER))
 TOTAL = N * N
 
@@ -44,8 +44,8 @@ def hilbert(i: int) -> Vector2:
             v.y += lenth
             v.x += lenth
         elif index == 3:
-            temp = lenth-1-v.x
-            v.x = lenth-1-v.y
+            temp = lenth - 1 - v.x
+            v.x = lenth - 1 - v.y
             v.y = temp
 
             v.x += lenth
@@ -72,17 +72,19 @@ def main():
                 pygame.quit()
                 return
 
-            screen.fill(BACKGROUND)
+        screen.fill(BACKGROUND)
 
-            for i in range(COUNTER - 1):
-                pygame.draw.line(screen, WHITE, (PATH[i].x, PATH[i].y), (PATH[i + 1].x, PATH[i + 1].y), 2)
+        if COUNTER == len(PATH):
+            COUNTER = 0
+        COUNTER += 10
+        if COUNTER >= len(PATH):
+            COUNTER = len(PATH)
 
-            COUNTER += 1
-            if COUNTER == len(PATH) + 1:
-                COUNTER = 0
+        for i in range(COUNTER - 1):
+            pygame.draw.line(screen, WHITE, (PATH[i].x, PATH[i].y), (PATH[i + 1].x, PATH[i + 1].y), 2)
 
-            pygame.display.flip()
-            pygame.display.update()
+        # pygame.display.flip()
+        pygame.display.update()
 
 
 if __name__ == '__main__':
