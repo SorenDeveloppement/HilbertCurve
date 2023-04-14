@@ -83,7 +83,6 @@ def main():
         for i in range(COUNTER - 1):
             pygame.draw.line(screen, WHITE, (PATH[i].x, PATH[i].y), (PATH[i + 1].x, PATH[i + 1].y), 2)
 
-        # pygame.display.flip()
         pygame.display.update()
 
 
